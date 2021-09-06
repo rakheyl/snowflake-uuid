@@ -28,7 +28,7 @@
     },
     "scripts": {
         "build": "npx tsc",
-        "test": "npx tsc && node ./lib/index.js"
+        "test": "npx tsc && node ./dist/index.js"
     },
     "types": "./dist/index.d.ts",
     "version": "1.0.0",
