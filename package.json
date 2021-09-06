@@ -1,0 +1,38 @@
+{
+    "author": {
+        "name": "Rakheyl",
+        "url": "https://github.com/rakheyl/"
+    },
+    "bugs": {
+        "url": "https://github.com/rakheyl/snowflake-uuid/issues"
+    },
+    "description": "Twitter's Snowflake generator implementation for NodeJS",
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "files": [
+        "/dist"
+    ],
+    "homepage": "https://github.com/rakheyl/snowflake-uuid#readme",
+    "keywords": [
+        "snowflake",
+        "uuid",
+        "id"
+    ],
+    "license": "GPL-3.0-or-later",
+    "main": "./dist/index.js",
+    "name": "snowflake-uuid",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/rakheyl/snowflake-uuid.git"
+    },
+    "scripts": {
+        "build": "npx tsc",
+        "test": "npx tsc && node ./lib/index.js"
+    },
+    "types": "./dist/index.d.ts",
+    "version": "1.0.0",
+    "devDependencies": {
+        "typescript": "^4.4.2"
+    }
+}
