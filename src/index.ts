@@ -1,6 +1,6 @@
 'use strict';
 
-export type NumberOrBigInt = bigint | number;
+export type NumberOrBigInt = number | bigint;
 
 export interface WorkerOptions {
 	epoch?: NumberOrBigInt;
@@ -24,7 +24,7 @@ export class Worker {
 	public readonly datacenterIdShift: bigint;
 	public readonly timestampLeftShift: bigint;
 	public readonly sequenceMask: bigint;
-	protected lastTimestamp: bigint = -1n;
+	protected timestamp: bigint = -1n;
 
 	public constructor(workerId: NumberOrBigInt = 0n, datacenterId: NumberOrBigInt = 0n, options?: WorkerOptions) {
 		// Epoch
@@ -34,7 +34,6 @@ export class Worker {
 		this.workerId = BigInt(workerId);
 		this.workerIdBits = BigInt(options?.workerIdBits ?? 5);
 		this.maxWorkerId = -1n ^ (-1n << this.workerIdBits);
-
 		if (this.workerId < 0 || this.workerId > this.maxWorkerId) {
 			throw new Error(`With ${this.workerIdBits} bits, worker id can't be greater than ${this.maxWorkerId} or less than 0`);
 		}
@@ -62,23 +61,27 @@ export class Worker {
 		return this.sequence;
 	}
 
+	public get lastTimestamp(): bigint {
+		return this.timestamp;
+	}
+
 	public nextId(): bigint {
 		let timestamp = Worker.now();
 
-		if (timestamp < this.lastTimestamp) {
-			throw new Error(`Clock moved backwards. Can't generate new ID for ${this.lastTimestamp - timestamp} milliseconds.`);
+		if (timestamp < this.timestamp) {
+			throw new Error(`Clock moved backwards. Can't generate new ID for ${this.timestamp - timestamp} milliseconds.`);
 		}
 
-		if (timestamp === this.lastTimestamp) {
+		if (timestamp === this.timestamp) {
 			this.sequence = (this.sequence + 1n) & this.sequenceMask;
 			if (this.sequence === 0n) {
-				timestamp = Worker.untilNextMillis(this.lastTimestamp);
+				timestamp = Worker.untilNextMillis(this.timestamp);
 			}
 		} else {
 			this.sequence = 0n;
 		}
 
-		this.lastTimestamp = timestamp;
+		this.timestamp = timestamp;
 
 		return (
 			((timestamp - this.epoch) << this.timestampLeftShift) |
