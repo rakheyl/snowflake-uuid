@@ -1,13 +1,13 @@
 'use strict';
 
-type Snowflake = bigint | number;
+export type NumberOrBigInt = bigint | number;
 
 interface WorkerOptions {
-	epoch?: Snowflake;
-	workerIdBits?: Snowflake;
-	datacenterIdBits?: Snowflake;
-	sequence?: Snowflake;
-	sequenceBits?: Snowflake;
+	epoch?: NumberOrBigInt;
+	workerIdBits?: NumberOrBigInt;
+	datacenterIdBits?: NumberOrBigInt;
+	sequence?: NumberOrBigInt;
+	sequenceBits?: NumberOrBigInt;
 }
 
 export class Worker {
@@ -26,7 +26,7 @@ export class Worker {
 	#sequenceMask: bigint;
 	#lastTimestamp: bigint = -1n;
 
-	constructor(workerId: Snowflake = 0n, datacenterId: Snowflake = 0n, options?: WorkerOptions) {
+	constructor(workerId: NumberOrBigInt = 0n, datacenterId: NumberOrBigInt = 0n, options?: WorkerOptions) {
 		// Epoch
 		this.#epoch = BigInt(options?.epoch ?? 1609459200000);
 
@@ -89,11 +89,7 @@ export class Worker {
 		let timestamp = Worker.now();
 
 		if (timestamp < this.#lastTimestamp) {
-			throw new Error(
-				"Clock moved backwards. Can't generate new ID for " +
-					(this.#lastTimestamp - timestamp).toString() +
-					'milliseconds.',
-			);
+			throw new Error("Clock moved backwards. Can't generate new ID for " + (this.#lastTimestamp - timestamp).toString() + 'milliseconds.');
 		}
 
 		if (timestamp === this.#lastTimestamp) {
