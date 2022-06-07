@@ -2,7 +2,7 @@
 
 export type NumberOrBigInt = bigint | number;
 
-interface WorkerOptions {
+export interface WorkerOptions {
 	epoch?: NumberOrBigInt;
 	workerIdBits?: NumberOrBigInt;
 	datacenterIdBits?: NumberOrBigInt;
