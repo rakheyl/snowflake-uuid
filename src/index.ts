@@ -36,9 +36,7 @@ export class Worker {
 		this.maxWorkerId = -1n ^ (-1n << this.workerIdBits);
 
 		if (this.workerId < 0 || this.workerId > this.maxWorkerId) {
-			throw new Error(
-				'With ' + this.workerIdBits.toString() + " bits, worker id can't be greater than " + this.maxWorkerId.toString() + ' or less than 0',
-			);
+			throw new Error(`With ${this.workerIdBits} bits, worker id can't be greater than ${this.maxWorkerId} or less than 0`);
 		}
 
 		// Datacenter
@@ -46,13 +44,7 @@ export class Worker {
 		this.datacenterIdBits = BigInt(options?.datacenterIdBits ?? 5);
 		this.maxDatacenterId = -1n ^ (-1n << this.datacenterIdBits);
 		if (this.datacenterId > this.maxDatacenterId || this.datacenterId < 0) {
-			throw new Error(
-				'With ' +
-					this.datacenterIdBits.toString() +
-					" bits, datacenter id can't be greater than " +
-					this.maxDatacenterId.toString() +
-					' or less than 0',
-			);
+			throw new Error(`With ${this.datacenterIdBits} bits, datacenter id can't be greater than ${this.maxDatacenterId} or less than 0`);
 		}
 
 		// Sequence
@@ -74,7 +66,7 @@ export class Worker {
 		let timestamp = Worker.now();
 
 		if (timestamp < this.lastTimestamp) {
-			throw new Error("Clock moved backwards. Can't generate new ID for " + (this.lastTimestamp - timestamp).toString() + 'milliseconds.');
+			throw new Error(`Clock moved backwards. Can't generate new ID for ${this.lastTimestamp - timestamp} milliseconds.`);
 		}
 
 		if (timestamp === this.lastTimestamp) {
